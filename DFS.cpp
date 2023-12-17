@@ -5,15 +5,9 @@
 
 class graph {
     int vertices;
-    std::list<int> *adj;
-    bool *visited;
+    std::map<int, bool> visited;
+    std::map<int, std::list<int> > adj;
     public:
-        graph(int vertices){
-            this->vertices = vertices;
-            adj = new std::list<int>[vertices];
-            visited = new bool[vertices];
-        }
-
         void addEdge(int x, int y) {
             adj[x].push_back(y);
             adj[y].push_back(x);
@@ -29,44 +23,22 @@ class graph {
             }
         }
 
-        void BFS(int s) {
-            std::vector<bool> visited;
-            visited.resize(vertices, false);
-
-            std::list<int> queue;
-            visited[s] = true;
-            queue.push_back(s);
-
-            while (!queue.empty()) {
-                s = queue.front();
-                std::cout << s << " ";
-                queue.pop_front();
-
-                for (auto adjacent : adj[s]) {
-                    if (!visited[adjacent]) {
-                        visited[adjacent] = true;
-                        queue.push_back(adjacent);
-                    }
-                }
-            }
-        }
-
         void DFS(int s) {
-            visited[s] = true;
-            std::list<int> DFSadj = adj[s];
-            std::cout << s << " ";
 
-            for (auto i = DFSadj.begin(); i != DFSadj.end(); i++) {
+            visited[vertices] = true;
+            std::cout << vertices << " ";
+
+            std::list<int>::iterator i;
+            for (i = adj[vertices].begin(); i != adj[vertices].end(); i++) {
                 if (!visited[*i]) {
                     DFS(*i);
                 }
             }
-            return;
         }
 };
 
 int main(void) {
-    graph g(4);
+    graph g;
     g.addEdge(0,1);
     g.addEdge(0,2);
     g.addEdge(2,3);
